@@ -1,0 +1,10 @@
+{
+  "key.tabbackpacked.previous": "Previous Backpack Page",
+  "key.tabbackpacked.next": "Next Backpack Page",
+
+  "tabbackpacked.configuration.title": "TABbackpacked Configs",
+  "tabbackpacked.configuration.section.tabbackpacked.client.toml": "TABbackpacked Client Config",
+  "tabbackpacked.configuration.section.tabbackpacked.client.toml.title": "TABbackpacked Client Config",
+  "tabbackpacked.configuration.navigationCooldownMs": "Page Switch Cooldown (ms)",
+  "tabbackpacked.configuration.navigationCooldownMs.tooltip": "Minimum interval between backpack page switches, in milliseconds."
+}

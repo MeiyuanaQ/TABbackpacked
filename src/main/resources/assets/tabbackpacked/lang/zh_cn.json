@@ -1,0 +1,10 @@
+{
+  "key.tabbackpacked.previous": "左翻页",
+  "key.tabbackpacked.next": "右翻页",
+
+  "tabbackpacked.configuration.title": "TABbackpacked 配置",
+  "tabbackpacked.configuration.section.tabbackpacked.client.toml": "TABbackpacked 客户端配置",
+  "tabbackpacked.configuration.section.tabbackpacked.client.toml.title": "TABbackpacked 客户端配置",
+  "tabbackpacked.configuration.navigationCooldownMs": "翻页间隔(毫秒)",
+  "tabbackpacked.configuration.navigationCooldownMs.tooltip": "两次背包翻页之间的最小间隔,单位毫秒。"
+}
