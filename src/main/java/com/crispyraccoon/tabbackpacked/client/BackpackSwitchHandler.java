@@ -10,6 +10,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.inventory.Slot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -55,6 +56,43 @@ public class BackpackSwitchHandler
     }
 
     @SubscribeEvent
+    public static void onMouseScrolled(ScreenEvent.MouseScrolled.Pre event)
+    {
+        Screen screen = event.getScreen();
+        if(!(screen instanceof BackpackScreen backpackScreen))
+            return;
+        if(!(screen instanceof PopupMenuHandler popup) || popup.hasPopupMenu())
+            return;
+
+        Pagination pagination = backpackScreen.getMenu().getPagination();
+        if(pagination.totalPages() <= 1)
+            return;
+
+        if(!isMouseInsideInventoryUi(backpackScreen, event.getMouseX(), event.getMouseY()))
+            return;
+
+        Slot hoveredSlot = backpackScreen.getSlotUnderMouse();
+        if(hoveredSlot != null && hoveredSlot.hasItem())
+            return;
+
+        double scrollDelta = event.getScrollDeltaY();
+        if(scrollDelta > 0 && pagination.currentPage() > 1 && canNavigate())
+        {
+            lastNavigationTime = Util.getMillis();
+            captureMouse();
+            pagination.previousPage();
+            event.setCanceled(true);
+        }
+        else if(scrollDelta < 0 && pagination.currentPage() < pagination.totalPages() && canNavigate())
+        {
+            lastNavigationTime = Util.getMillis();
+            captureMouse();
+            pagination.nextPage();
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
     public static void onScreenInitPost(ScreenEvent.Init.Post event)
     {
         if(pendingMouseRestore && event.getScreen() instanceof BackpackScreen)
@@ -70,6 +108,14 @@ public class BackpackSwitchHandler
         pendingMouseX = handler.xpos();
         pendingMouseY = handler.ypos();
         pendingMouseRestore = true;
+    }
+
+    private static boolean isMouseInsideInventoryUi(BackpackScreen screen, double mouseX, double mouseY)
+    {
+        int guiLeft = screen.getGuiLeft();
+        int guiTop = screen.getGuiTop();
+        return mouseX >= guiLeft && mouseX < guiLeft + screen.getXSize()
+            && mouseY >= guiTop && mouseY < guiTop + screen.getYSize();
     }
 
     private static boolean canNavigate()
